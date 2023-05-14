@@ -14,5 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('posts/posts');
 });
+
+Route::get('/posts/{postId}', function ($fileName) {
+    $path = __DIR__ . "/../resources/posts/$fileName.html";
+
+    if (!file_exists($path)) {
+        abort(404);
+    }
+
+    $post = file_get_contents($path);
+
+    return view('posts/post', [
+        'post' => $post
+    ]);
+})->whereAlphaNumeric('postId');
+// })->where('postId', '[0-9A-z_\-]+');
