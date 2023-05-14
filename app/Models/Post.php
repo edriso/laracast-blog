@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 // use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
@@ -34,7 +35,8 @@ class Post extends Model
         // return array_map(fn ($file) => $file->getContents(), $files);
         // return array_map(fn ($file) => file_get_contents($file), $files);
         $files = File::files(resource_path("posts"));
-        return collect($files)
+
+        return Cache::rememberForever('posts.all', fn () => collect($files)
             ->map(fn ($file) => YamlFrontMatter::parseFile($file))
             ->map(fn ($document) => new Post(
                 $document->title,
@@ -43,7 +45,9 @@ class Post extends Model
                 $document->body(),
                 $document->slug,
             ))
-            ->sortByDesc('date');
+            ->sortByDesc('date'));
+
+        // Cache::forget('posts.all'); // let's use it when making changes to $posts
     }
 
     public static function find($slug)
