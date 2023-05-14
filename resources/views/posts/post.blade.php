@@ -16,7 +16,10 @@
 </head>
 
 <body>
-    <?php echo $post; ?>
+    <article>
+        <h2>{{ $post->title }}</h2>
+        <?= $post->body ?>
+    </article>
 
     <a href="/">Go Back</a>
 </body>
