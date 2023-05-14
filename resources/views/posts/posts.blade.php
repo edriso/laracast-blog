@@ -16,29 +16,10 @@
 </head>
 
 <body>
-    <article>
-        <h2><a href="/posts/1">First Post</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quo ut eaque amet consequuntur magnam aliquam
-            dolore quidem obcaecati. Veritatis porro ut dolorem consectetur exercitationem adipisci reprehenderit
-            facilis fuga corporis quisquam similique ad quae eveniet iure magni nisi iste nam, provident quos, delectus,
-            tempora sapiente doloribus ipsam doloremque. Ducimus, magni?</p>
-    </article>
-
-    <article>
-        <h2><a href="/posts/2">Second Post</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quo ut eaque amet consequuntur magnam aliquam
-            dolore quidem obcaecati. Veritatis porro ut dolorem consectetur exercitationem adipisci reprehenderit
-            facilis fuga corporis quisquam similique ad quae eveniet iure magni nisi iste nam, provident quos, delectus,
-            tempora sapiente doloribus ipsam doloremque. Ducimus, magni?</p>
-    </article>
-
-    <article>
-        <h2><a href="/posts/3">Third Post</a></h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quo ut eaque amet consequuntur magnam aliquam
-            dolore quidem obcaecati. Veritatis porro ut dolorem consectetur exercitationem adipisci reprehenderit
-            facilis fuga corporis quisquam similique ad quae eveniet iure magni nisi iste nam, provident quos, delectus,
-            tempora sapiente doloribus ipsam doloremque. Ducimus, magni?</p>
-    </article>
+    @foreach ($posts as $post)
+        {{-- {{ $post }} --}}
+        <?= $post ?>
+    @endforeach
 </body>
 
 </html>
