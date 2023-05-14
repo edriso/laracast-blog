@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 use function PHPUnit\Framework\isEmpty;
@@ -19,12 +20,9 @@ Route::get('/', function () {
     return view('posts/posts');
 });
 
-Route::get('/posts/{postId}', function ($fileName) {
-    if (!file_exists($path = __DIR__ . "/../resources/posts/$fileName.html")) {
-        abort(404);
-    }
-
-    $post = cache()->remember("posts.{$path}", now()->addMinutes(30), fn () => file_get_contents($path));
+Route::get('/posts/{postId}', function ($slug) {
+    // Find a post by its slug, and pass it to a view called "post"
+    $post = Post::find($slug);
 
     return view('posts/post', [
         'post' => $post
