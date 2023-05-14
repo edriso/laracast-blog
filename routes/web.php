@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use function PHPUnit\Framework\isEmpty;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,16 +20,14 @@ Route::get('/', function () {
 });
 
 Route::get('/posts/{postId}', function ($fileName) {
-    $path = __DIR__ . "/../resources/posts/$fileName.html";
-
-    if (!file_exists($path)) {
+    if (!file_exists($path = __DIR__ . "/../resources/posts/$fileName.html")) {
         abort(404);
     }
 
-    $post = file_get_contents($path);
+    $post = cache()->remember("posts.{$path}", now()->addMinutes(30), fn () => file_get_contents($path));
 
     return view('posts/post', [
         'post' => $post
     ]);
-})->whereAlphaNumeric('postId');
-// })->where('postId', '[0-9A-z_\-]+');
+})->where('postId', '[0-9A-z_\-]+');
+// })->whereAlphaNumeric('postId');
