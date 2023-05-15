@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cache;
-// use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
@@ -31,9 +31,6 @@ class Post extends Model
 
     public static function getAll()
     {
-        // $files = File::files(resource_path("posts/"));
-        // return array_map(fn ($file) => $file->getContents(), $files);
-        // return array_map(fn ($file) => file_get_contents($file), $files);
         $files = File::files(resource_path("posts"));
 
         return Cache::rememberForever('posts.all', fn () => collect($files)
@@ -50,18 +47,14 @@ class Post extends Model
         // Cache::forget('posts.all'); // let's use it when making changes to $posts
     }
 
-    public static function find($slug)
+    public static function findOrFail($slug)
     {
-        // if (!file_exists($path = __DIR__ . "/../resources/posts/$slug.html")) {
-        // if (!file_exists($path = resource_path("posts/$slug.html"))) {
-        // return redirect('/'); // models not responsible for this, controller is
-        // abort(404);
-        // throw new ModelNotFoundException();
-        // }
-        // return cache()->remember("posts.{$path}", now()->addMinutes(30), fn () => file_get_contents($path));
+        $post = static::getAll()->firstWhere('slug', $slug);
 
-        // of all the blog posts,
-        // find the one with a slug that matches the one that was requested
-        return static::getAll()->firstWhere('slug', $slug);
+        if (!$post) {
+            throw new ModelNotFoundException();
+        }
+
+        return $post;
     }
 }
