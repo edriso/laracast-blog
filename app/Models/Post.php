@@ -18,7 +18,13 @@ class Post extends Model
         'slug',
         'excerpt',
         'body',
+        'category_id',
     ];
+
+    public function Category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     // public $title;
     // public $excerpt;
