@@ -4,57 +4,60 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
+// use Illuminate\Database\Eloquent\ModelNotFoundException;
+// use Illuminate\Support\Facades\Cache;
+// use Illuminate\Support\Facades\File;
+// use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Post extends Model
 {
     use HasFactory;
 
-    public $title;
-    public $excerpt;
-    public $body;
-    public $date;
-    public $slug;
+    protected $fillable = [
+        'title',
+        'slug',
+        'excerpt',
+        'body',
+    ];
 
-    public function __construct($title, $excerpt, $date, $body, $slug)
-    {
-        $this->title = $title;
-        $this->excerpt = $excerpt;
-        $this->date = $date;
-        $this->body = $body;
-        $this->slug = $slug;
-    }
+    // public $title;
+    // public $excerpt;
+    // public $body;
+    // public $date;
+    // public $slug;
+    // public function __construct($title, $excerpt, $date, $body, $slug)
+    // {
+    //     $this->title = $title;
+    //     $this->excerpt = $excerpt;
+    //     $this->date = $date;
+    //     $this->body = $body;
+    //     $this->slug = $slug;
+    // }
+    // public static function getAll()
+    // {
+    //     $files = File::files(resource_path("posts"));
 
+    //     return Cache::rememberForever('posts.all', fn () => collect($files)
+    //         ->map(fn ($file) => YamlFrontMatter::parseFile($file))
+    //         ->map(fn ($document) => new Post(
+    //             $document->title,
+    //             $document->excerpt,
+    //             $document->date,
+    //             $document->body(),
+    //             $document->slug,
+    //         ))
+    //         ->sortByDesc('date'));
 
-    public static function getAll()
-    {
-        $files = File::files(resource_path("posts"));
+    //     // Cache::forget('posts.all'); // let's use it when making changes to $posts
+    // }
+    // public static function findOrFail($slug)
+    // {
+    //     $post = static::getAll()->firstWhere('slug', $slug);
 
-        return Cache::rememberForever('posts.all', fn () => collect($files)
-            ->map(fn ($file) => YamlFrontMatter::parseFile($file))
-            ->map(fn ($document) => new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-                $document->slug,
-            ))
-            ->sortByDesc('date'));
+    //     if (!$post) {
+    //         throw new ModelNotFoundException();
+    //     }
 
-        // Cache::forget('posts.all'); // let's use it when making changes to $posts
-    }
-
-    public static function findOrFail($slug)
-    {
-        $post = static::getAll()->firstWhere('slug', $slug);
-
-        if (!$post) {
-            throw new ModelNotFoundException();
-        }
-
-        return $post;
-    }
+    //     return $post;
+    // }
 }
