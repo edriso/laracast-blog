@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Illuminate\Database\Eloquent\ModelNotFoundException;
 // use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\File;
@@ -13,57 +16,26 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'excerpt',
-        'body',
-        'category_id',
-    ];
+    protected $guarded = [];
 
-    public function Category()
+    protected $with = ['category', 'author'];
+
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    // public $title;
-    // public $excerpt;
-    // public $body;
-    // public $date;
-    // public $slug;
-    // public function __construct($title, $excerpt, $date, $body, $slug)
+    // public function user()
     // {
-    //     $this->title = $title;
-    //     $this->excerpt = $excerpt;
-    //     $this->date = $date;
-    //     $this->body = $body;
-    //     $this->slug = $slug;
+    //     return $this->belongsTo(User::class);
     // }
-    // public static function getAll()
-    // {
-    //     $files = File::files(resource_path("posts"));
+    public function author()
+    {
+        // in the relation if you didn't specify the FK,
+        // Laravel will assume it's 'methodName_id', i.e. here 'author_id'
+        // return $this->belongsTo(User::class);
 
-    //     return Cache::rememberForever('posts.all', fn () => collect($files)
-    //         ->map(fn ($file) => YamlFrontMatter::parseFile($file))
-    //         ->map(fn ($document) => new Post(
-    //             $document->title,
-    //             $document->excerpt,
-    //             $document->date,
-    //             $document->body(),
-    //             $document->slug,
-    //         ))
-    //         ->sortByDesc('date'));
-
-    //     // Cache::forget('posts.all'); // let's use it when making changes to $posts
-    // }
-    // public static function findOrFail($slug)
-    // {
-    //     $post = static::getAll()->firstWhere('slug', $slug);
-
-    //     if (!$post) {
-    //         throw new ModelNotFoundException();
-    //     }
-
-    //     return $post;
-    // }
+        // Specify the foreign key if it's different from the assumed 'author_id'
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

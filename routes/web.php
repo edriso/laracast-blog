@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Post;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,15 +17,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('posts/posts', [
-        'posts' => Post::with('category')->get()
+    return view('posts.index', [
+        // 'posts' => Post::latest()->with(['category', 'author'])->get()
+        'posts' => Post::latest()->get()
     ]);
 });
 
-// Route::get('/posts/{post}', function (Post $post) {
-Route::get('/posts/{post:slug}', function (Post $post) {
-    return view('posts/post', [
+Route::get('posts/{post:slug}', function (Post $post) {
+    return view('posts.show', [
         'post' => $post
     ]);
-})->where('post', '[0-9A-z_\-]+');
-// })->whereAlphaNumeric('post');
+});
+
+Route::get('/categories/{category}', function (Category $category) {
+    return view('posts.index', [
+        // 'posts' => $category->posts->load(['category', 'author'])
+        'posts' => $category->posts
+    ]);
+});
+
+// remember we have to call it $author to match the {wildcard}
+Route::get('/authors/{author:username}', function (User $author) {
+    return view('posts.index', ['posts' => $author->posts]);
+});
