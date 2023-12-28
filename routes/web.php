@@ -29,14 +29,12 @@ Route::get('posts/{post:slug}', function (Post $post) {
     ]);
 });
 
-Route::get('/categories/{category}', function (Category $category) {
+Route::get('/categories/{category:slug}', function (Category $category) {
     return view('posts.index', [
-        // 'posts' => $category->posts->load(['category', 'author'])
         'posts' => $category->posts
     ]);
 });
 
-// remember we have to call it $author to match the {wildcard}
 Route::get('/authors/{author:username}', function (User $author) {
     return view('posts.index', ['posts' => $author->posts]);
 });
