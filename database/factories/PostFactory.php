@@ -24,9 +24,9 @@ class PostFactory extends Factory
             // if you don't know what method or property you're looking for, try to guess
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),
-            'excerpt' => $this->faker->sentence(),
-            'body' => $this->faker->paragraph(),
-
+            // 'excerpt' => $this->faker->paragraph(),
+            'excerpt' => '<p>' . implode('<p></p>', $this->faker->paragraphs(2)) . '</p>',
+            'body' => '<p>' . implode('<p></p>', $this->faker->paragraphs(6)) . '</p>',
         ];
     }
 }

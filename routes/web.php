@@ -18,23 +18,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('posts.index', [
-        // 'posts' => Post::latest()->with(['category', 'author'])->get()
-        'posts' => Post::latest()->get()
+        'posts' => Post::latest()->get(),
+        'categories' => Category::all(),
     ]);
-});
+})->name('home');
 
 Route::get('posts/{post:slug}', function (Post $post) {
     return view('posts.show', [
-        'post' => $post
+        'post' => $post,
     ]);
 });
 
 Route::get('/categories/{category:slug}', function (Category $category) {
     return view('posts.index', [
-        'posts' => $category->posts
+        'posts' => $category->posts,
+        'categories' => Category::all(),
+        'currentCategory' => $category,
     ]);
-});
+})->name('category');
 
 Route::get('/authors/{author:username}', function (User $author) {
-    return view('posts.index', ['posts' => $author->posts]);
-});
+    return view('posts.index', [
+        'posts' => $author->posts,
+        'categories' => Category::all(),
+    ]);
+})->name('author');
