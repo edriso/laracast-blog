@@ -24,8 +24,8 @@ class Post extends Model
     {
         // if ($filters['search'] ?? false) {
         //     $query
-        //         ->where('title', 'like', '%' . request('search') . '%')
-        //         ->orWhere('body', 'like', '%' . request('search') . '%');
+        //         ->where('title', 'like', '%' . $filters['search'] . '%')
+        //         ->orWhere('body', 'like', '%' . $filters['search'] . '%');
         // }
 
         // another way using query builder
