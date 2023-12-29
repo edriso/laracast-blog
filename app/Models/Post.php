@@ -22,25 +22,40 @@ class Post extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        // if ($filters['search'] ?? false) {
-        //     $query
-        //         ->where('title', 'like', '%' . $filters['search'] . '%')
-        //         ->orWhere('body', 'like', '%' . $filters['search'] . '%');
-        // }
-
-        // another way using query builder
-        // it'll accept $query again, and the conditional we used '$filters['search']'
-        // $query->when($filters['search'] ?? false, function ($query, $search) {
-        //     $query
-        //         ->where('title', 'like', '%' . $search . '%')
-        //         ->orWhere('body', 'like', '%' . $search . '%');
-        // });
-
-        // using arrow function
         $query->when($filters['search'] ?? false, fn($query, $search) =>
+            $query->where(fn($query) =>
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('body', 'like', '%' . $search . '%')
+            )
+        );
+
+        $query->when($filters['category'] ?? false, fn($query, $category) =>
+            // $query
+            //     ->whereExists(fn($query) =>
+            //         $query->from('categories')
+            //             // notice below where clause looking for a value in the 2nd parameter
+            //             // so it treated 'posts.category_id' as a string, but we want posts.category_id
+            //             // ->where('categories.id', 'posts.category_id')
+            //                 //using clockwork: SELECT * FROM `posts` WHERE EXISTS (SELECT * FROM `categories` WHERE `categories`.`id` = 'posts.category_id' and `categories`.`slug` = 'cum-id-aliquid-occaecati-et-consequatur-illum-quod') ORDER BY `created_at` DESC
+
+            //             ->whereColumn('categories.id', 'posts.category_id')
+            //                 //SELECT * FROM `posts` WHERE EXISTS (SELECT * FROM `categories` WHERE `categories`.`id` = `posts`.`category_id` and `categories`.`slug` = 'cum-id-aliquid-occaecati-et-consequatur-illum-quod') ORDER BY `created_at` DESC
+            //             ->where('categories.slug', $category)
+            //     )
+
             $query
-                ->where('title', 'like', '%' . $search . '%')
-                ->orWhere('body', 'like', '%' . $search . '%'));
+                //'category' below corresponds to category() relationship
+                ->whereHas('category', fn($query) =>
+                    $query->where('slug', $category)
+                )
+        );
+
+        $query->when($filters['author'] ?? false, fn($query, $author) =>
+            $query
+                ->whereHas('author', fn($query) =>
+                    $query->where('username', $author)
+                )
+        );
     }
 
     public function category()
