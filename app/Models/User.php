@@ -11,13 +11,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $guarded = [];
-
     public function getUsernameAttribute($username)
     {
         return ucwords($username);
