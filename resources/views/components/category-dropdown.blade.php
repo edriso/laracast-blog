@@ -1,7 +1,7 @@
 <x-dropdown>
     <x-slot name="trigger">
         <button
-            class="flex font-semibold items-center justify-between gap-1 w-32 min-w-full"
+            class="flex font-semibold items-center justify-between gap-1 w-32 min-w-full p-2"
         >
             <span>
                 {{ isset($currentCategory) ? ucwords($currentCategory->name) : 'Categories' }}

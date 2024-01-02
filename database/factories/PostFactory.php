@@ -19,14 +19,14 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), //laravel automatically will create a user, and grab its id here
+            'user_id' => User::factory(),
             'category_id' => Category::factory(),
-            // if you don't know what method or property you're looking for, try to guess
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),
             // 'excerpt' => $this->faker->paragraph(),
             'excerpt' => '<p>' . implode('<p></p>', $this->faker->paragraphs(2)) . '</p>',
             'body' => '<p>' . implode('<p></p>', $this->faker->paragraphs(6)) . '</p>',
+            'thumbnail' => 'thumbnails/illustration-' . rand(1, 5) . '.png',
         ];
     }
 }

@@ -6,7 +6,7 @@ use Exception;
 use App\Services\Newsletter;
 use Illuminate\Validation\ValidationException;
 
-class NewletterController extends Controller
+class NewsletterController extends Controller
 {
     public function __invoke(Newsletter $newsletter)
     {
